@@ -10,21 +10,28 @@ public class Matrix {
     private int rowNum;
     private int columnNum;
     private HashMap<String,Integer> cMap = new HashMap<>();
+    private String[] columnName;
 
     public Matrix(double[][] m, String[] nameList){
         rowNum = m.length;
         columnNum = m[0].length;
+        ArrayList<String> columnName = new ArrayList<>();
         Set<String> set = new HashSet<>();
         for(String name:nameList){
             if(set.contains(name)){
                 throw new RuntimeException("Duplicate column name");
             }else{
                 set.add(name);
+                columnName.add(name);
             }
         }
+        this.columnName = columnName.toArray(new String[0]);
         generateMatrix(m,nameList);
     }
 
+    /**
+     * 生成特征矩阵，默认最后一列为决策属性，其余为条件属性
+     */
     private void generateMatrix(double[][] m, String[] columnName){
         Cell[] trow = new Cell[rowNum];
         Cell[] tcolumn = new Cell[columnNum];
@@ -90,75 +97,11 @@ public class Matrix {
 
     }
 
-//    public Cell[][] divide(String name){
-//        HashMap<Double,Integer> map = new HashMap<>();
-//        ArrayList<ArrayList<Cell>> result = new ArrayList<>();
-//
-//        // 用来检测是否有符合名称的列
-//        boolean flag = false;
-//
-//        for(Cell c:column){
-//            if(name.equals(c.getName())){
-//                flag = true;
-//                double[] templist = c.getData();
-//                for(int i=0;i<templist.length;i++){
-//                    if(!map.containsKey(templist[i])){
-//                        map.put(templist[i],i);
-//                        ArrayList<Cell> nlist = new ArrayList<>();
-//                        nlist.add(row[i]);
-//                        result.add(nlist);
-//                    }else{
-//                        result.get(map.get(templist[i])).add(row[i]);
-//                    }
-//                }
-//            }
-//            // 只划分第一个名称匹配的列
-//            if(flag){
-//                break;
-//            }
-//        }
-//
-//        if(!flag){
-//            throw new RuntimeException("The column name was not found");
-//        }
-//
-//        Cell[][] res = new Cell[result.size()][];
-//        for(int i=0;i<res.length;i++){
-//            res[i] = result.get(i).toArray(new Cell[0]);
-//        }
-//
-//        return res;
-//
-//    }
-
-//    public Cell[][] divide(int index){
-//        HashMap<Double,Integer> map = new HashMap<>();
-//        ArrayList<ArrayList<Cell>> result = new ArrayList<>();
-//
-//        if(index>columnNum || index < 1){
-//            throw new RuntimeException("The number of columns does not match");
-//        }
-//
-//        double[] templist = column[index-1].getData();
-//        for(int i=0;i<templist.length;i++){
-//            if(!map.containsKey(templist[i])){
-//                map.put(templist[i],i);
-//                ArrayList<Cell> nlist = new ArrayList<>();
-//                nlist.add(row[i]);
-//                result.add(nlist);
-//            }else{
-//                result.get(map.get(templist[i])).add(row[i]);
-//            }
-//        }
-//
-//        Cell[][] res = new Cell[result.size()][];
-//        for(int i=0;i<res.length;i++){
-//            res[i] = result.get(i).toArray(new Cell[0]);
-//        }
-//
-//        return res;
-//    }
-
+    public String[] getColumnName() {
+        String[] res = new String[columnName.length];
+        System.arraycopy(columnName, 0, res, 0, columnName.length);
+        return res;
+    }
 
     public int getRowNum() {
         return rowNum;
@@ -170,6 +113,16 @@ public class Matrix {
 
     public CellArray getRow() throws CloneNotSupportedException {
         return row.clone();
+    }
+
+    public String getDecisionAttr(){
+        return columnName[columnName.length-1];
+    }
+
+    public String[] getConditionAttr(){
+        String[] res = new String[columnName.length];
+        System.arraycopy(columnName, 0, res, 0, columnName.length-1);
+        return res;
     }
 
     @Override
