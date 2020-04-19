@@ -84,6 +84,7 @@ public class ApproximateMarkovBlanket {
         }
         return s.toArray(new String[0][0]);
     }
+    
 
     private GPG greedy_predominant_groups_generator(double delta) throws CloneNotSupportedException {
         String[][] L = feature_selection(delta);
@@ -130,7 +131,7 @@ public class ApproximateMarkovBlanket {
         while (i!=k){
             int j = r.nextInt(d+1);
             if(j<SLen){
-                
+
             }
         }
     }
