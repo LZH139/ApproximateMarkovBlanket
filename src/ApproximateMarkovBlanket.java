@@ -84,7 +84,7 @@ public class ApproximateMarkovBlanket {
         }
         return s.toArray(new String[0][0]);
     }
-    
+
 
     private GPG greedy_predominant_groups_generator(double delta) throws CloneNotSupportedException {
         String[][] L = feature_selection(delta);
